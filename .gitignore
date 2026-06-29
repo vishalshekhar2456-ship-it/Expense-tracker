@@ -1,0 +1,28 @@
+# Build output
+build/
+
+# Dart tool cache
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# iOS CocoaPods
+ios/Pods/
+ios/.symlinks/
+
+# Android Gradle
+android/.gradle/
+android/local.properties
+
+# macOS
+macos/Pods/
+
+# Env / secrets — never commit these
+.env
+google-services.json      # if you don't want it public
+GoogleService-Info.plist  # same
