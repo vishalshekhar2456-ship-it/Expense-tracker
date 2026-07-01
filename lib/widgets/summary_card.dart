@@ -48,7 +48,7 @@ class SummaryCard extends StatelessWidget {
             const SizedBox(height: 4),
 
             Text(
-              "\$${amount.toStringAsFixed(2)}",
+              amount.toStringAsFixed(2),
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,

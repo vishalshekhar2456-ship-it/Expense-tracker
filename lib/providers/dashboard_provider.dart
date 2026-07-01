@@ -7,8 +7,6 @@ import '../models/transaction_model.dart';
 class DashboardProvider extends ChangeNotifier {
   bool isLoading = false;
 
-  late AccountSummary summary;
-
   late SavingsTip savingsTip;
 
   final List<TransactionModel> transactions = [];
@@ -17,18 +15,35 @@ class DashboardProvider extends ChangeNotifier {
     loadDashboard();
   }
 
+  /// -------------------------
+  /// Computed Summary
+  /// -------------------------
+
+  double get totalIncome => transactions
+      .where((t) => t.isIncome)
+      .fold(0.0, (sum, t) => sum + t.amount);
+
+  double get totalExpense => transactions
+      .where((t) => !t.isIncome)
+      .fold(0.0, (sum, t) => sum + t.amount);
+
+  double get totalBalance => totalIncome - totalExpense;
+
+  AccountSummary get summary => AccountSummary(
+        totalBalance: totalBalance,
+        income: totalIncome,
+        expense: totalExpense,
+      );
+
+  /// -------------------------
+  /// Load Initial Data
+  /// -------------------------
+
   Future<void> loadDashboard() async {
     isLoading = true;
     notifyListeners();
 
     await Future.delayed(const Duration(milliseconds: 400));
-
-    summary = const AccountSummary(
-      totalBalance: 4250,
-      income: 3500,
-      expense: 1250,
-      growth: 2.4,
-    );
 
     savingsTip = const SavingsTip(
       title: "Smart Savings",
@@ -66,6 +81,72 @@ class DashboardProvider extends ChangeNotifier {
     ]);
 
     isLoading = false;
+    notifyListeners();
+  }
+
+  /// -------------------------
+  /// Add Expense
+  /// -------------------------
+
+  void addExpense({
+    required String title,
+    required String category,
+    required double amount,
+  }) {
+    transactions.insert(
+      0,
+      TransactionModel(
+        id: DateTime.now().millisecondsSinceEpoch,
+        title: title,
+        category: category,
+        date: DateTime.now(),
+        amount: amount,
+        isIncome: false,
+      ),
+    );
+
+    notifyListeners();
+  }
+
+  /// -------------------------
+  /// Add Income
+  /// -------------------------
+
+  void addIncome({
+    required String title,
+    required String category,
+    required double amount,
+  }) {
+    transactions.insert(
+      0,
+      TransactionModel(
+        id: DateTime.now().millisecondsSinceEpoch,
+        title: title,
+        category: category,
+        date: DateTime.now(),
+        amount: amount,
+        isIncome: true,
+      ),
+    );
+
+    notifyListeners();
+  }
+
+  /// -------------------------
+  /// Delete Transaction
+  /// -------------------------
+
+  void deleteTransaction(int id) {
+    transactions.removeWhere((transaction) => transaction.id == id);
+    notifyListeners();
+  }
+
+  /// -------------------------
+  /// Clear All Transactions
+  /// -------------------------
+
+  void clearTransactions() {
+    transactions.clear();
     notifyListeners();
   }
 }

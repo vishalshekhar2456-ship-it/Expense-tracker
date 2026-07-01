@@ -6,6 +6,7 @@ import 'firebase_options.dart';
 import 'providers/dashboard_provider.dart';
 import 'screens/landing_screen.dart';
 import 'theme/app_theme.dart';
+import 'package:expense_tracker/screens/dashboard_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +33,8 @@ class SpendWiseApp extends StatelessWidget {
         title: 'SpendWise',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.theme,
-        home: const LandingScreen(),
+        // home: const LandingScreen(),
+        home: const DashboardScreen(),
       ),
     );
   }
