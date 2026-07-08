@@ -1,41 +1,40 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:expenseful/app/theme.dart';
+import 'package:expenseful/features/settings/presentation/screen.dart';
+import 'package:go_router/go_router.dart';
+import 'package:expenseful/features/home/presentation/home_screen.dart';
 
-import 'firebase_options.dart';
-import 'providers/dashboard_provider.dart';
-import 'screens/landing_screen.dart';
-import 'theme/app_theme.dart';
-import 'package:expense_tracker/screens/dashboard_screen.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  runApp(const SpendWiseApp());
+void main() {
+  runApp(const ExpensefulApp());
 }
 
-class SpendWiseApp extends StatelessWidget {
-  const SpendWiseApp({super.key});
+final GoRouter _router = GoRouter(
+  initialLocation: '/',
+  routes: [
+    GoRoute(
+      path: '/',
+      name: 'dashboard',
+      builder: (context, state) => const DashboardScreen(),
+    ),
+    GoRoute(
+      path: '/settings',
+      name: 'settings',
+      builder: (context, state) => const SettingsScreen(),
+    ),
+  ],
+);
+
+class ExpensefulApp extends StatelessWidget {
+  const ExpensefulApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (_) => DashboardProvider(),
-        ),
-      ],
-      child: MaterialApp(
-        title: 'SpendWise',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.theme,
-        // home: const LandingScreen(),
-        home: const DashboardScreen(),
-      ),
+    return MaterialApp.router(
+      title: 'expenseful',
+      debugShowCheckedModeBanner: false,
+      theme: buildAppTheme(AppThemeVariant.warm),
+      routerConfig: _router,
     );
   }
 }
