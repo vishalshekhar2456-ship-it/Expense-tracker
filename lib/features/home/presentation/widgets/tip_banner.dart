@@ -25,7 +25,7 @@ class TipBanner extends StatelessWidget {
                   style: AppTypography.bodyMedium.copyWith(
                     fontSize: 11,
                     letterSpacing: 0.6,
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white.withValues(alpha: 0.7),
                   ),
                 ),
                 Text(

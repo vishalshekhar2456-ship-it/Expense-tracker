@@ -46,7 +46,6 @@ class HomeHeader extends StatelessWidget {
         /// Notifications
         IconButton(
           onPressed: () {
-            // TODO
           },
           icon: const Icon(Icons.notifications_none_rounded),
         ),

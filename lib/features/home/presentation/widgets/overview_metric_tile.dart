@@ -34,7 +34,7 @@ class OverviewMetricTile extends StatelessWidget {
           CircleAvatar(
             radius: 18,
             backgroundColor:
-                (iconColor ?? theme.colorScheme.primary).withOpacity(0.12),
+                (iconColor ?? theme.colorScheme.primary).withValues(alpha: 0.12),
             child: Icon(
               icon,
               size: 20,

@@ -207,9 +207,9 @@ ThemeData _buildWarmTheme() {
       bodyLarge: AppTypography.bodyRegular,
       bodyMedium: AppTypography.bodyMedium,
     ),
-    bottomSheetTheme: BottomSheetThemeData(
+    bottomSheetTheme: const BottomSheetThemeData(
       backgroundColor: AppColors.surface,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(AppRadii.sheet),
         ),
@@ -268,9 +268,9 @@ ThemeData _buildAltDarkTheme() {
         color: AppColorsAltDark.onBackground,
       ),
     ),
-    bottomSheetTheme: BottomSheetThemeData(
+    bottomSheetTheme: const BottomSheetThemeData(
       backgroundColor: AppColorsAltDark.surface,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(AppRadii.sheet),
         ),
@@ -328,9 +328,9 @@ ThemeData _buildAltLightTheme() {
         color: AppColorsAltLight.onBackground,
       ),
     ),
-    bottomSheetTheme: BottomSheetThemeData(
+    bottomSheetTheme: const BottomSheetThemeData(
       backgroundColor: AppColorsAltLight.surface,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(AppRadii.sheet),
         ),

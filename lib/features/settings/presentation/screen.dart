@@ -97,7 +97,7 @@ class _SettingsSection extends StatelessWidget {
             child: Text(
               title,
               style: AppTypography.bodyMedium.copyWith(
-                color: AppColors.plumInk.withOpacity(0.55),
+                color: AppColors.plumInk.withValues(alpha: 0.55),
                 fontSize: 13,
                 letterSpacing: 0.4,
               ),
@@ -105,7 +105,7 @@ class _SettingsSection extends StatelessWidget {
           ),
           Container(
             decoration: BoxDecoration(
-              color: AppColors.surface.withOpacity(0.5),
+              color: AppColors.surface.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(AppRadii.card),
             ),
             child: Column(
@@ -117,7 +117,7 @@ class _SettingsSection extends StatelessWidget {
                       height: 1,
                       indent: AppSpacing.xxl + AppSpacing.xs,
                       endIndent: AppSpacing.md,
-                      color: AppColors.plumInk.withOpacity(0.08),
+                      color: AppColors.plumInk.withValues(alpha: 0.08),
                     ),
                 ],
               ],
@@ -147,7 +147,7 @@ class _SettingsItem extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, size: 20, color: AppColors.plumInk.withOpacity(0.75)),
+            Icon(icon, size: 20, color: AppColors.plumInk.withValues(alpha: 0.75)),
             const SizedBox(width: AppSpacing.md),
             Expanded(
               child: Text(
@@ -161,7 +161,7 @@ class _SettingsItem extends StatelessWidget {
             Icon(
               Icons.chevron_right_rounded,
               size: 20,
-              color: AppColors.plumInk.withOpacity(0.35),
+              color: AppColors.plumInk.withValues(alpha: 0.35),
             ),
           ],
         ),

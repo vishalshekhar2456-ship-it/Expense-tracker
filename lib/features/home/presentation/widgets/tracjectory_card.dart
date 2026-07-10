@@ -71,7 +71,7 @@ class _ProgressRow extends StatelessWidget {
             Text(
               value,
               style: AppTypography.bodyMedium.copyWith(
-                color: AppColors.plumInk.withOpacity(0.6),
+                color: AppColors.plumInk.withValues(alpha: 0.6),
               ),
             ),
           ],
@@ -91,7 +91,7 @@ class _ProgressRow extends StatelessWidget {
           footnote,
           style: AppTypography.bodyMedium.copyWith(
             fontSize: 11,
-            color: AppColors.plumInk.withOpacity(0.45),
+            color: AppColors.plumInk.withValues(alpha: 0.45),
           ),
         ),
       ],

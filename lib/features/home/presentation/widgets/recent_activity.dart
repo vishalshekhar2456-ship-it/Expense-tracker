@@ -27,7 +27,7 @@ class RecentActivityCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
             child: Row(
               children: [
-                Icon(Icons.receipt_rounded, size: 18, color: AppColors.plumInk.withOpacity(0.7)),
+                Icon(Icons.receipt_rounded, size: 18, color: AppColors.plumInk.withValues(alpha: 0.7)),
                 const SizedBox(width: AppSpacing.xs),
                 Text('Recent Activity', style: AppTypography.displayMedium.copyWith(fontSize: 16)),
               ],
@@ -37,7 +37,7 @@ class RecentActivityCard extends StatelessWidget {
           for (int i = 0; i < items.length; i++) ...[
             _ActivityRow(item: items[i]),
             if (i != items.length - 1)
-              Divider(height: 1, indent: 52, color: AppColors.plumInk.withOpacity(0.06)),
+              Divider(height: 1, indent: 52, color: AppColors.plumInk.withValues(alpha: 0.06)),
           ],
         ],
       ),
@@ -70,7 +70,7 @@ class _ActivityRow extends StatelessWidget {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: item.color.withOpacity(0.15),
+              color: item.color.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(AppRadii.card / 2),
             ),
             child: Icon(item.icon, size: 18, color: item.color),
@@ -85,7 +85,7 @@ class _ActivityRow extends StatelessWidget {
                   item.subtitle,
                   style: AppTypography.bodyMedium.copyWith(
                     fontSize: 11,
-                    color: AppColors.plumInk.withOpacity(0.45),
+                    color: AppColors.plumInk.withValues(alpha: 0.45),
                   ),
                 ),
               ],

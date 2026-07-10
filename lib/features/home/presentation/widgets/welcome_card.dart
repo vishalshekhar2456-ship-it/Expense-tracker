@@ -14,7 +14,7 @@ class WelcomeHeader extends StatelessWidget {
         Text(
           'Your jar is filling up steadily this month.',
           style: AppTypography.bodyRegular.copyWith(
-            color: AppColors.plumInk.withOpacity(0.6),
+            color: AppColors.plumInk.withValues(),
           ),
         ),
       ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:expenseful/app/theme.dart';
+import 'package:go_router/go_router.dart';
 
 class BalanceCard extends StatelessWidget {
   const BalanceCard({super.key});
@@ -22,14 +23,14 @@ class BalanceCard extends StatelessWidget {
                 style: AppTypography.bodyMedium.copyWith(
                   fontSize: 12,
                   letterSpacing: 0.6,
-                  color: AppColors.plumInk.withOpacity(0.5),
+                  color: AppColors.plumInk.withValues(alpha: 0.5),
                 ),
               ),
               const Spacer(),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
-                  color: AppColors.success.withOpacity(0.15),
+                  color: AppColors.success.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(AppRadii.chip),
                 ),
                 child: Text(
@@ -52,7 +53,7 @@ class BalanceCard extends StatelessWidget {
                   icon: Icons.add_rounded,
                   label: 'Add Expense',
                   filled: true,
-                  onTap: () {},
+                  onTap:() => context.push('/add_expense'),
                 ),
               ),
               const SizedBox(width: AppSpacing.sm),
