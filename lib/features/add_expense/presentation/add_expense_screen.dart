@@ -8,18 +8,21 @@ import 'package:expenseful/app/theme.dart';
 // Widgets imports
 import 'widgets/save_bar.dart';
 import 'widgets/category_section.dart';
-import '/data/models/categories.dart';
+import '../../../core/constants/categories.dart';
 import 'widgets/expense_form.dart';
 import 'widgets/amount_card.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:expenseful/providers/database_provider.dart';
 
-class AddExpenseScreen extends StatefulWidget {
+class AddExpenseScreen extends ConsumerStatefulWidget {
   const AddExpenseScreen({super.key});
 
   @override
-  State<AddExpenseScreen> createState() => _AddExpenseScreenState();
+  ConsumerState<AddExpenseScreen> createState() => _AddExpenseScreenState();
 }
 
-class _AddExpenseScreenState extends State<AddExpenseScreen> {
+class _AddExpenseScreenState
+    extends ConsumerState<AddExpenseScreen> {
   final TextEditingController _amountController =
       TextEditingController(text: '0.00');
   final TextEditingController _merchantController = TextEditingController();
@@ -46,6 +49,33 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       setState(() => _selectedDate = picked);
     }
   }
+
+  Future<void> _saveExpense() async {
+  final amount =
+      double.tryParse(_amountController.text.trim()) ?? 0.0;
+
+  if (amount <= 0) return;
+
+  if (_merchantController.text.trim().isEmpty) return;
+
+  final db = ref.read(appDatabaseProvider);
+
+  await db.addExpense(
+    amount: amount,
+    merchant: _merchantController.text.trim(),
+    notes: _notesController.text.trim().isEmpty
+        ? null
+        : _notesController.text.trim(),
+    date: _selectedDate,
+
+    // We'll replace this with the real category ID in Phase 2.
+    categoryId: _selectedCategoryIndex?.toString(),
+  );
+
+  if (!mounted) return;
+
+  context.pop();
+}
 
   String get _formattedDate {
     return '${_selectedDate.day.toString().padLeft(2, '0')}/'
@@ -92,7 +122,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               ],
             ),
           ),
-          SaveBar(onSave: () => context.pop()),
+          SaveBar(onSave: () => _saveExpense()),
         ],
       ),
     );

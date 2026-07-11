@@ -1,18 +1,33 @@
-import 'package:expenseful/app/theme.dart';
-import 'package:flutter/material.dart';
+import 'package:drift/drift.dart';
 
-  class CategoryOption {
-  final String label;
-  final IconData icon;
-  final Color color;
-  const CategoryOption(this.label, this.icon, this.color);
+class Categories extends Table {
+  /// UUID
+  TextColumn get id => text()();
+
+  /// Display name
+  TextColumn get name => text()();
+
+  /// Icon key (e.g. "restaurant")
+  TextColumn get icon => text()();
+
+  /// Color key (e.g. "coral")
+  TextColumn get color => text()();
+
+  /// Display order
+  IntColumn get sortOrder => integer()();
+
+  /// Default categories cannot be deleted
+  BoolColumn get isDefault => boolean().withDefault(const Constant(false))();
+
+  /// Hide instead of deleting
+  BoolColumn get isArchived => boolean().withDefault(const Constant(false))();
+
+  /// Creation timestamp
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+
+  /// Last modification timestamp
+  DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {id};
 }
-
-   const List<CategoryOption> categories = [
-    CategoryOption('Food', Icons.restaurant_rounded, AppColors.coral),
-    CategoryOption('Shopping', Icons.shopping_bag_rounded, AppColors.marigold),
-    CategoryOption('Transport', Icons.directions_car_rounded, AppColors.teal),
-    CategoryOption('Utilities', Icons.bolt_rounded, AppColors.grape),
-    CategoryOption('Fun', Icons.movie_rounded, AppColors.sky),
-    CategoryOption('Health', Icons.favorite_rounded, AppColors.pink),
-  ];
