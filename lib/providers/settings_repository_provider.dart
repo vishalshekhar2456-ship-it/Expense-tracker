@@ -1,6 +1,7 @@
-import 'package:expenseful/repositories/settings_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:expenseful/data/database.dart';
+
+import 'package:expenseful/repositories/settings_repository.dart';
+import 'database_provider.dart';
 
 part 'settings_repository_provider.g.dart';
 

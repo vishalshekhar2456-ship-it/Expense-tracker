@@ -1,75 +1,85 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:expenseful/app/theme.dart';
-
-class SettingsScreen extends StatelessWidget {
+import 'package:expenseful/providers/settings_provider.dart';
+import 'currency_screen.dart';
+class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settingsAsync = ref.watch(settingsProvider);
+    final currencyCode = settingsAsync.value?.currencyCode ?? 'INR';
+
     return Scaffold(
       backgroundColor: AppColors.paperBackground,
       appBar: AppBar(
         backgroundColor: AppColors.paperBackground,
         elevation: 0,
-        title: Text(
-          'Settings',
-          style: AppTypography.displayMedium,
-        ),
+        title: Text('Settings', style: AppTypography.displayMedium),
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-        children: const [
+        children: [
           _SettingsSection(
             title: 'Currency & Locale',
             items: [
-              _SettingsItem(icon: Icons.attach_money_rounded, label: 'Default currency'),
-              _SettingsItem(icon: Icons.calendar_today_rounded, label: 'Date format'),
+              _SettingsItem(
+                icon: Icons.attach_money_rounded,
+                label: 'Default currency',
+                trailingLabel: currencyCode,
+                onTap: () => CurrencyPickerSheet.show(context),
+              ),
+              const _SettingsItem(
+                icon: Icons.calendar_today_rounded,
+                label: 'Date format',
+              ),
             ],
           ),
-          _SettingsSection(
+          const _SettingsSection(
             title: 'Categories & Tags',
             items: [
               _SettingsItem(icon: Icons.category_rounded, label: 'Manage categories'),
               _SettingsItem(icon: Icons.label_rounded, label: 'Manage tags'),
             ],
           ),
-          _SettingsSection(
+          const _SettingsSection(
             title: 'Recurring Expenses',
             items: [
               _SettingsItem(icon: Icons.repeat_rounded, label: 'Manage recurring rules'),
             ],
           ),
-          _SettingsSection(
+          const _SettingsSection(
             title: 'Budget & Insights',
             items: [
               _SettingsItem(icon: Icons.pie_chart_rounded, label: 'Monthly budget'),
             ],
           ),
-          _SettingsSection(
+          const _SettingsSection(
             title: 'Appearance',
             items: [
               _SettingsItem(icon: Icons.palette_rounded, label: 'Theme'),
             ],
           ),
-          _SettingsSection(
+          const _SettingsSection(
             title: 'Data & Backup',
             items: [
               _SettingsItem(icon: Icons.ios_share_rounded, label: 'Export data'),
             ],
           ),
-          _SettingsSection(
+          const _SettingsSection(
             title: 'Security & Privacy',
             items: [
               _SettingsItem(icon: Icons.lock_rounded, label: 'App lock'),
             ],
           ),
-          _SettingsSection(
+          const _SettingsSection(
             title: 'About & Support',
             items: [
               _SettingsItem(icon: Icons.info_outline_rounded, label: 'About expenseful'),
             ],
           ),
-          SizedBox(height: AppSpacing.lg),
+          const SizedBox(height: AppSpacing.lg),
         ],
       ),
     );
@@ -132,13 +142,20 @@ class _SettingsSection extends StatelessWidget {
 class _SettingsItem extends StatelessWidget {
   final IconData icon;
   final String label;
+  final String? trailingLabel;
+  final VoidCallback? onTap;
 
-  const _SettingsItem({required this.icon, required this.label});
+  const _SettingsItem({
+    required this.icon,
+    required this.label,
+    this.trailingLabel,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap ?? () {},
       borderRadius: BorderRadius.circular(AppRadii.card),
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -158,6 +175,15 @@ class _SettingsItem extends StatelessWidget {
                 ),
               ),
             ),
+            if (trailingLabel != null) ...[
+              Text(
+                trailingLabel!,
+                style: AppTypography.bodyMedium.copyWith(
+                  color: AppColors.plumInk.withValues(alpha: 0.5),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.xs),
+            ],
             Icon(
               Icons.chevron_right_rounded,
               size: 20,
