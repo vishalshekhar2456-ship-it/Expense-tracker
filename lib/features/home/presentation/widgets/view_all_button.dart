@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:expenseful/app/theme.dart';
-
+import 'expense_history.dart'; // adjust to actual path
 
 class ViewAllButton extends StatelessWidget {
   const ViewAllButton({super.key});
@@ -10,7 +10,18 @@ class ViewAllButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: OutlinedButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => Scaffold(
+                appBar: AppBar(
+                  title: const Text('Expense History'),
+                ),
+                body: const ExpenseHistoryWidget(),
+              ),
+            ),
+          );
+        },
         style: OutlinedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm + 4),
           side: BorderSide(color: AppColors.plumInk.withValues(alpha: 0.15)),

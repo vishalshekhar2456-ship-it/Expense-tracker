@@ -8,7 +8,6 @@ import 'package:expenseful/app/theme.dart';
 // Widgets imports
 import 'widgets/save_bar.dart';
 import 'widgets/category_section.dart';
-import '../../../core/constants/categories.dart';
 import 'widgets/expense_form.dart';
 import 'widgets/amount_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,7 +27,7 @@ class _AddExpenseScreenState
   final TextEditingController _merchantController = TextEditingController();
   final TextEditingController _notesController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
-  int? _selectedCategoryIndex;
+  String? _selectedCategoryId;
 
   @override
   void dispose() {
@@ -60,17 +59,15 @@ class _AddExpenseScreenState
 
   final db = ref.read(appDatabaseProvider);
 
-  await db.addExpense(
-    amount: amount,
-    merchant: _merchantController.text.trim(),
-    notes: _notesController.text.trim().isEmpty
-        ? null
-        : _notesController.text.trim(),
-    date: _selectedDate,
-
-    // We'll replace this with the real category ID in Phase 2.
-    categoryId: _selectedCategoryIndex?.toString(),
-  );
+ await db.addExpense(
+  amount: amount,
+  merchant: _merchantController.text.trim(),
+  notes: _notesController.text.trim().isEmpty
+      ? null
+      : _notesController.text.trim(),
+  date: _selectedDate,
+  categoryId: _selectedCategoryId,
+);
 
   if (!mounted) return;
 
@@ -114,9 +111,8 @@ class _AddExpenseScreenState
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 CategorySection(
-                  categories: categories,
-                  selectedIndex: _selectedCategoryIndex,
-                  onSelect: (i) => setState(() => _selectedCategoryIndex = i),
+                  selectedCategoryId: _selectedCategoryId,
+                  onSelect: (id) => setState(() => _selectedCategoryId = id),
                 ),
                 const SizedBox(height: AppSpacing.xxl),
               ],
