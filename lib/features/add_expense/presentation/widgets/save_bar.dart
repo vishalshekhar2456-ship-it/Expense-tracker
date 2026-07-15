@@ -4,7 +4,8 @@ import 'package:expenseful/app/theme.dart';
 
 class SaveBar extends StatelessWidget {
   final VoidCallback onSave;
-  const SaveBar({super.key, required this.onSave});
+  final String label;
+  const SaveBar({super.key, required this.onSave, this.label = 'Save Expense'});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class SaveBar extends StatelessWidget {
             ),
           ),
           child: Text(
-            'Save Expense',
+            label,
             style: AppTypography.bodyRegular.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.w600,

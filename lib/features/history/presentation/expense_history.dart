@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:expenseful/app/theme.dart';
 import 'package:expenseful/data/database.dart';
@@ -49,22 +50,49 @@ class ExpenseHistoryWidget extends ConsumerWidget {
                 final color = _categoryColor(category?.color);
                 final icon = _categoryIcon(category?.icon);
 
-                return ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  leading: CircleAvatar(
-                    backgroundColor: color.withValues(alpha: 0.12),
-                    child: Icon(icon, color: color, size: 20),
+                return Dismissible(
+                  key: ValueKey(expense.id),
+                  direction: DismissDirection.endToStart,
+                  background: Container(
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    color: AppColors.coral.withValues(alpha: 0.12),
+                    child: const Icon(Icons.delete_outline,
+                        color: AppColors.coral),
                   ),
-                  title: Text(
-                    expense.merchant,
-                    style: AppTypography.bodyMedium,
-                  ),
-                  subtitle: Text(DateFormat(dateFormat).format(expense.date)),
-                  trailing: Text(
-                    '$currencySymbol${expense.amount.toStringAsFixed(2)}',
-                    style: AppTypography.bodyMedium.copyWith(
-                      color: color,
-                      fontWeight: FontWeight.bold,
+                  onDismissed: (_) async {
+                    await database.deleteExpense(expense.id);
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context)
+                      ..hideCurrentSnackBar()
+                      ..showSnackBar(
+                        SnackBar(
+                          content: Text('${expense.merchant} deleted'),
+                          action: SnackBarAction(
+                            label: 'Undo',
+                            onPressed: () => database.restoreExpense(expense.id),
+                          ),
+                        ),
+                      );
+                  },
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    onTap: () => context.push('/edit_expense', extra: expense),
+                    leading: CircleAvatar(
+                      backgroundColor: color.withValues(alpha: 0.12),
+                      child: Icon(icon, color: color, size: 20),
+                    ),
+                    title: Text(
+                      expense.merchant,
+                      style: AppTypography.bodyMedium,
+                    ),
+                    subtitle: Text(DateFormat(dateFormat).format(expense.date)),
+                    trailing: Text(
+                      '$currencySymbol${expense.amount.toStringAsFixed(2)}',
+                      style: AppTypography.bodyMedium.copyWith(
+                        color: color,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 );

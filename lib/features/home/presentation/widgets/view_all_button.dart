@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:expenseful/app/theme.dart';
-import 'expense_history.dart'; // adjust to actual path
+import 'package:expenseful/features/history/presentation/expense_history.dart'; // adjust to actual path
 
 class ViewAllButton extends StatelessWidget {
   const ViewAllButton({super.key});
