@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:expenseful/app/theme.dart';
+import 'package:expenseful/core/widgets/app_text_field.dart';
 import 'package:expenseful/providers/currency_provider.dart';
 
 class AmountCard extends ConsumerWidget {
   final TextEditingController controller;
-  const AmountCard({super.key, required this.controller});
+  final String? errorText;
+  final ValueChanged<String>? onChanged;
+  const AmountCard({
+    super.key,
+    required this.controller,
+    this.errorText,
+    this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currencySymbol = ref.watch(currencySymbolProvider);
+    final hasError = errorText != null;
 
     return Container(
       width: double.infinity,
@@ -17,6 +26,7 @@ class AmountCard extends ConsumerWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(AppRadii.card),
+        border: hasError ? Border.all(color: AppColors.coral) : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,9 +47,9 @@ class AmountCard extends ConsumerWidget {
               ),
               const SizedBox(width: 4),
               Expanded(
-                child: TextField(
+                child: AppTextField(
                   controller: controller,
-                  stylusHandwritingEnabled: false,
+                  onChanged: onChanged,
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   style: AppTypography.numericLarge,
                   decoration: const InputDecoration(
@@ -51,14 +61,14 @@ class AmountCard extends ConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.sm),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 4),
-            decoration: BoxDecoration(
-              color: AppColors.grape.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(AppRadii.chip),
+          if (hasError) ...[
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              errorText!,
+              style: AppTypography.bodyMedium
+                  .copyWith(fontSize: 12, color: AppColors.coral),
             ),
-          ),
+          ],
         ],
       ),
     );

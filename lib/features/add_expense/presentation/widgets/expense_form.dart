@@ -7,6 +7,8 @@ class FormCard extends StatelessWidget {
   final TextEditingController notesController;
   final String date;
   final VoidCallback onDateTap;
+  final String? merchantError;
+  final ValueChanged<String>? onMerchantChanged;
 
   const FormCard({
     super.key,
@@ -14,6 +16,8 @@ class FormCard extends StatelessWidget {
     required this.notesController,
     required this.date,
     required this.onDateTap,
+    this.merchantError,
+    this.onMerchantChanged,
   });
 
   @override
@@ -33,6 +37,8 @@ class FormCard extends StatelessWidget {
             controller: merchantController,
             hint: 'e.g. Starbucks, Amazon, Blinkit',
             icon: Icons.storefront_rounded,
+            errorText: merchantError,
+            onChanged: onMerchantChanged,
           ),
           const SizedBox(height: AppSpacing.md),
           const _FieldLabel('Date'),

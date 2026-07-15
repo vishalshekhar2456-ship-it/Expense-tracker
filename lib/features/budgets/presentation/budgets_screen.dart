@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:expenseful/app/theme.dart';
 import 'package:expenseful/core/budget_period.dart';
 import 'package:expenseful/core/constants/category_visuals.dart';
+import 'package:expenseful/core/widgets/app_text_field.dart';
 import 'package:expenseful/data/database.dart';
 import 'package:expenseful/providers/budgets_provider.dart';
 import 'package:expenseful/providers/categories_provider.dart';
@@ -140,9 +141,8 @@ class BudgetsScreen extends ConsumerWidget {
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.surface,
         title: Text(title, style: AppTypography.displayMedium.copyWith(fontSize: 18)),
-        content: TextField(
+        content: AppTextField(
           controller: controller,
-          stylusHandwritingEnabled: false,
           autofocus: true,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           inputFormatters: [

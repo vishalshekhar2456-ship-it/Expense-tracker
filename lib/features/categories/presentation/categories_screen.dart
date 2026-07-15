@@ -6,6 +6,7 @@ import 'package:expenseful/app/theme.dart';
 import 'package:expenseful/core/constants/categories.dart';
 import 'package:expenseful/core/constants/category_visuals.dart';
 import 'package:expenseful/core/text_similarity.dart';
+import 'package:expenseful/core/widgets/app_text_field.dart';
 import 'package:expenseful/data/database.dart';
 import 'package:expenseful/providers/categories_provider.dart';
 import 'package:expenseful/providers/database_provider.dart';
@@ -381,9 +382,8 @@ class _AddCategorySheetState extends ConsumerState<AddCategorySheet> {
                     color: AppColors.plumInk.withValues(alpha: 0.5),
                   )),
               const SizedBox(height: AppSpacing.sm),
-              TextField(
+              AppTextField(
                 controller: _nameController,
-                stylusHandwritingEnabled: false,
                 textCapitalization: TextCapitalization.words,
                 inputFormatters: [LengthLimitingTextInputFormatter(24)],
                 decoration: const InputDecoration(

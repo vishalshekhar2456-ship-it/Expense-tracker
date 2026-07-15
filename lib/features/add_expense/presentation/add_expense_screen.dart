@@ -10,6 +10,7 @@ import 'widgets/save_bar.dart';
 import 'widgets/category_section.dart';
 import 'widgets/expense_form.dart';
 import 'widgets/amount_card.dart';
+import 'expense_validation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:expenseful/providers/database_provider.dart';
 
@@ -28,6 +29,8 @@ class _AddExpenseScreenState
   final TextEditingController _notesController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
   String? _selectedCategoryId;
+  String? _amountError;
+  String? _merchantError;
 
   @override
   void dispose() {
@@ -50,29 +53,36 @@ class _AddExpenseScreenState
   }
 
   Future<void> _saveExpense() async {
-  final amount =
-      double.tryParse(_amountController.text.trim()) ?? 0.0;
+    final errors = validateExpenseInput(
+      amountText: _amountController.text,
+      merchantText: _merchantController.text,
+    );
 
-  if (amount <= 0) return;
+    if (errors.amount != null || errors.merchant != null) {
+      setState(() {
+        _amountError = errors.amount;
+        _merchantError = errors.merchant;
+      });
+      return;
+    }
 
-  if (_merchantController.text.trim().isEmpty) return;
+    final amount = double.parse(_amountController.text.trim());
+    final db = ref.read(appDatabaseProvider);
 
-  final db = ref.read(appDatabaseProvider);
+    await db.addExpense(
+      amount: amount,
+      merchant: _merchantController.text.trim(),
+      notes: _notesController.text.trim().isEmpty
+          ? null
+          : _notesController.text.trim(),
+      date: _selectedDate,
+      categoryId: _selectedCategoryId,
+    );
 
- await db.addExpense(
-  amount: amount,
-  merchant: _merchantController.text.trim(),
-  notes: _notesController.text.trim().isEmpty
-      ? null
-      : _notesController.text.trim(),
-  date: _selectedDate,
-  categoryId: _selectedCategoryId,
-);
+    if (!mounted) return;
 
-  if (!mounted) return;
-
-  context.pop();
-}
+    context.pop();
+  }
 
   String get _formattedDate {
     return '${_selectedDate.day.toString().padLeft(2, '0')}/'
@@ -101,13 +111,27 @@ class _AddExpenseScreenState
             child: ListView(
               padding: const EdgeInsets.all(AppSpacing.md),
               children: [
-                AmountCard(controller: _amountController),
+                AmountCard(
+                  controller: _amountController,
+                  errorText: _amountError,
+                  onChanged: (_) {
+                    if (_amountError != null) {
+                      setState(() => _amountError = null);
+                    }
+                  },
+                ),
                 const SizedBox(height: AppSpacing.lg),
                 FormCard(
                   merchantController: _merchantController,
                   notesController: _notesController,
                   date: _formattedDate,
                   onDateTap: _pickDate,
+                  merchantError: _merchantError,
+                  onMerchantChanged: (_) {
+                    if (_merchantError != null) {
+                      setState(() => _merchantError = null);
+                    }
+                  },
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 CategorySection(

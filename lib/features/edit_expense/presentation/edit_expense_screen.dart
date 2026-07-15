@@ -14,6 +14,7 @@ import 'package:expenseful/features/add_expense/presentation/widgets/save_bar.da
 import 'package:expenseful/features/add_expense/presentation/widgets/category_section.dart';
 import 'package:expenseful/features/add_expense/presentation/widgets/expense_form.dart';
 import 'package:expenseful/features/add_expense/presentation/widgets/amount_card.dart';
+import 'package:expenseful/features/add_expense/presentation/expense_validation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:expenseful/providers/database_provider.dart';
 
@@ -31,6 +32,8 @@ class _EditExpenseScreenState extends ConsumerState<EditExpenseScreen> {
   late final TextEditingController _notesController;
   late DateTime _selectedDate;
   late String? _selectedCategoryId;
+  String? _amountError;
+  String? _merchantError;
 
   @override
   void initState() {
@@ -65,12 +68,20 @@ class _EditExpenseScreenState extends ConsumerState<EditExpenseScreen> {
   }
 
   Future<void> _saveExpense() async {
-    final amount = double.tryParse(_amountController.text.trim()) ?? 0.0;
+    final errors = validateExpenseInput(
+      amountText: _amountController.text,
+      merchantText: _merchantController.text,
+    );
 
-    if (amount <= 0) return;
+    if (errors.amount != null || errors.merchant != null) {
+      setState(() {
+        _amountError = errors.amount;
+        _merchantError = errors.merchant;
+      });
+      return;
+    }
 
-    if (_merchantController.text.trim().isEmpty) return;
-
+    final amount = double.parse(_amountController.text.trim());
     final db = ref.read(appDatabaseProvider);
 
     final notes = _notesController.text.trim();
@@ -118,13 +129,27 @@ class _EditExpenseScreenState extends ConsumerState<EditExpenseScreen> {
             child: ListView(
               padding: const EdgeInsets.all(AppSpacing.md),
               children: [
-                AmountCard(controller: _amountController),
+                AmountCard(
+                  controller: _amountController,
+                  errorText: _amountError,
+                  onChanged: (_) {
+                    if (_amountError != null) {
+                      setState(() => _amountError = null);
+                    }
+                  },
+                ),
                 const SizedBox(height: AppSpacing.lg),
                 FormCard(
                   merchantController: _merchantController,
                   notesController: _notesController,
                   date: _formattedDate,
                   onDateTap: _pickDate,
+                  merchantError: _merchantError,
+                  onMerchantChanged: (_) {
+                    if (_merchantError != null) {
+                      setState(() => _merchantError = null);
+                    }
+                  },
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 CategorySection(
