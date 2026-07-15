@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:expenseful/app/theme.dart';
 import 'package:expenseful/providers/settings_provider.dart';
 import 'currency_screen.dart';
@@ -49,10 +50,14 @@ class SettingsScreen extends ConsumerWidget {
               _SettingsItem(icon: Icons.repeat_rounded, label: 'Manage recurring rules'),
             ],
           ),
-          const _SettingsSection(
+          _SettingsSection(
             title: 'Budget & Insights',
             items: [
-              _SettingsItem(icon: Icons.pie_chart_rounded, label: 'Monthly budget'),
+              _SettingsItem(
+                icon: Icons.pie_chart_rounded,
+                label: 'Monthly budget',
+                onTap: () => context.push('/budgets'),
+              ),
             ],
           ),
           const _SettingsSection(

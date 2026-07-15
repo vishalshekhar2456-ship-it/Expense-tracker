@@ -5,8 +5,8 @@ import 'package:expenseful/app/theme.dart';
 import 'widgets/tip_banner.dart';
 import 'widgets/view_all_button.dart';
 import 'widgets/recent_activity.dart';
-import 'widgets/tracjectory_card.dart';
 import 'widgets/balance_card.dart';
+import 'widgets/budget_card.dart';
 import 'widgets/welcome_card.dart';
 import 'widgets/top_bar.dart';
 
@@ -27,7 +27,7 @@ class DashboardScreen extends StatelessWidget {
             SizedBox(height: AppSpacing.lg),
             BalanceCard(),
             SizedBox(height: AppSpacing.lg),
-            TrajectoryCard(),
+            BudgetCard(),
             SizedBox(height: AppSpacing.lg),
             RecentActivityCard(),
             SizedBox(height: AppSpacing.md),

@@ -42,4 +42,11 @@ class SettingsRepository {
       AppSettingsCompanion(currencyCode: Value(currencyCode)),
     );
   }
+
+  /// Sets (or clears, with null) the overall monthly budget cap.
+  Future<void> updateMonthlyBudget(double? amount) {
+    return updateSettings(
+      AppSettingsCompanion(monthlyBudget: Value(amount)),
+    );
+  }
 }

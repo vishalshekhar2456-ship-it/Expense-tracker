@@ -1,12 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:expenseful/app/theme.dart';
 import 'package:go_router/go_router.dart';
 
-class BalanceCard extends StatelessWidget {
+import 'package:expenseful/data/database.dart';
+import 'package:expenseful/providers/currency_provider.dart';
+import 'package:expenseful/providers/expenses_provider.dart';
+
+class BalanceCard extends ConsumerWidget {
   const BalanceCard({super.key});
 
+  /// Sums the amounts of expenses whose date falls in [start, end).
+  double _totalForRange(
+      List<Expense> expenses, DateTime start, DateTime end) {
+    return expenses
+        .where((e) => !e.date.isBefore(start) && e.date.isBefore(end))
+        .fold(0.0, (sum, e) => sum + e.amount);
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final expenses = ref.watch(expensesProvider).value ?? const <Expense>[];
+    final currencySymbol = ref.watch(currencySymbolProvider);
+
+    final now = DateTime.now();
+    final thisMonthStart = DateTime(now.year, now.month, 1);
+    final nextMonthStart = DateTime(now.year, now.month + 1, 1);
+    final lastMonthStart = DateTime(now.year, now.month - 1, 1);
+
+    final thisMonthTotal =
+        _totalForRange(expenses, thisMonthStart, nextMonthStart);
+    final lastMonthTotal =
+        _totalForRange(expenses, lastMonthStart, thisMonthStart);
+
+    // Month-over-month change; only meaningful once there's a prior month.
+    final double? changePct = lastMonthTotal > 0
+        ? ((thisMonthTotal - lastMonthTotal) / lastMonthTotal) * 100
+        : null;
+    // Spending down (or flat) reads as positive/green; up reads as coral.
+    final bool spendingUp = (changePct ?? 0) > 0;
+    final changeColor = spendingUp ? AppColors.coral : AppColors.success;
+
     return Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
@@ -27,24 +61,27 @@ class BalanceCard extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                decoration: BoxDecoration(
-                  color: AppColors.success.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(AppRadii.chip),
-                ),
-                child: Text(
-                  '-12%',
-                  style: AppTypography.bodyMedium.copyWith(
-                    fontSize: 12,
-                    color: AppColors.success,
+              if (changePct != null)
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: changeColor.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(AppRadii.chip),
+                  ),
+                  child: Text(
+                    '${spendingUp ? '+' : '-'}${changePct.abs().toStringAsFixed(0)}%',
+                    style: AppTypography.bodyMedium.copyWith(
+                      fontSize: 12,
+                      color: changeColor,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
           const SizedBox(height: AppSpacing.sm),
-          Text('₹4,210.00', style: AppTypography.numericLarge),
+          Text('$currencySymbol${thisMonthTotal.toStringAsFixed(2)}',
+              style: AppTypography.numericLarge),
           const SizedBox(height: AppSpacing.lg),
           Row(
             children: [

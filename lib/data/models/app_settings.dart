@@ -11,4 +11,7 @@ class AppSettings extends Table {
   TextColumn get themeVariant => text().withDefault(const Constant('warm'))();
 
   IntColumn get budgetResetDay => integer().withDefault(const Constant(1))();
+
+  /// Overall monthly budget cap. Null means no overall budget is set.
+  RealColumn get monthlyBudget => real().nullable()();
 }

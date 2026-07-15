@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 import 'models/app_settings.dart';
 import 'models/expenses.dart';
 import 'models/categories.dart';
+import 'models/budgets.dart';
 
 part 'database.g.dart';
 
@@ -13,6 +14,7 @@ part 'database.g.dart';
     AppSettings,
     Expenses,
     Categories,
+    Budgets,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -21,10 +23,17 @@ class AppDatabase extends _$AppDatabase {
   static const Uuid _uuid = Uuid();
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
 @override
 MigrationStrategy get migration => MigrationStrategy(
+  onUpgrade: (Migrator m, int from, int to) async {
+    // v3: overall monthly budget + per-category Budgets table.
+    if (from < 3) {
+      await m.addColumn(appSettings, appSettings.monthlyBudget);
+      await m.createTable(budgets);
+    }
+  },
   onCreate: (Migrator m) async {
     await m.createAll();
 
@@ -255,6 +264,31 @@ Future<void> restoreCategory(String id) async {
       updatedAt: Value(DateTime.now()),
     ),
   );
+}
+
+// ==========================================================================
+// Budget CRUD (per-category limits)
+// ==========================================================================
+
+/// Watches all per-category budget limits.
+Stream<List<Budget>> watchBudgets() {
+  return select(budgets).watch();
+}
+
+/// Creates or updates the budget limit for a category.
+Future<void> setBudget(String categoryId, double amount) {
+  return into(budgets).insertOnConflictUpdate(
+    BudgetsCompanion(
+      categoryId: Value(categoryId),
+      amount: Value(amount),
+      updatedAt: Value(DateTime.now()),
+    ),
+  );
+}
+
+/// Removes the budget limit for a category.
+Future<void> deleteBudget(String categoryId) {
+  return (delete(budgets)..where((b) => b.categoryId.equals(categoryId))).go();
 }
 }
 
