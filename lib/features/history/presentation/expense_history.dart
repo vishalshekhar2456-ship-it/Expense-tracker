@@ -18,7 +18,7 @@ class ExpenseHistoryWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final expensesAsync = ref.watch(expensesProvider);
     final categoriesById = {
-      for (final c in ref.watch(categoriesProvider).value ?? <Category>[])
+      for (final c in ref.watch(allCategoriesProvider).value ?? <Category>[])
         c.id: c,
     };
     final currencySymbol = ref.watch(currencySymbolProvider);

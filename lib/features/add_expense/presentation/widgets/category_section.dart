@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:expenseful/app/theme.dart';
 import 'package:expenseful/data/database.dart';
 import 'package:expenseful/providers/database_provider.dart';
@@ -28,7 +29,7 @@ class CategorySection extends ConsumerWidget {
                 style: AppTypography.displayMedium.copyWith(fontSize: 15)),
             const Spacer(),
             TextButton(
-              onPressed: () {},
+              onPressed: () => context.push('/categories'),
               style: TextButton.styleFrom(padding: EdgeInsets.zero),
               child: Text(
                 'Manage Categories',

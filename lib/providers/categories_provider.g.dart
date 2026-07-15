@@ -22,5 +22,26 @@ final categoriesProvider = AutoDisposeStreamProvider<List<Category>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef CategoriesRef = AutoDisposeStreamProviderRef<List<Category>>;
+String _$allCategoriesHash() => r'3b1631b2296e7f0efd335d35de49f4b80425a804';
+
+/// All categories including archived ones — for the management screen and for
+/// resolving icon/color of expenses whose category was later archived.
+///
+/// Copied from [allCategories].
+@ProviderFor(allCategories)
+final allCategoriesProvider =
+    AutoDisposeStreamProvider<List<Category>>.internal(
+  allCategories,
+  name: r'allCategoriesProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$allCategoriesHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef AllCategoriesRef = AutoDisposeStreamProviderRef<List<Category>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

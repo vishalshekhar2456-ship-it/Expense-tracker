@@ -234,6 +234,17 @@ Stream<List<Category>> watchCategories() {
       .watch();
 }
 
+/// Watches every category, including archived ones. Used by the category
+/// management screen and by display lookups (so a past expense whose category
+/// was archived still renders with the right icon/color).
+Stream<List<Category>> watchAllCategories() {
+  return (select(categories)
+        ..orderBy([
+          (c) => OrderingTerm.asc(c.sortOrder),
+        ]))
+      .watch();
+}
+
 Future<Category?> getCategory(String id) {
   return (select(categories)
         ..where((c) => c.id.equals(id)))

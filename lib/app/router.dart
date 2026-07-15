@@ -5,6 +5,7 @@ import 'package:expenseful/features/home/presentation/home_screen.dart';
 import 'package:expenseful/features/add_expense/presentation/add_expense_screen.dart';
 import 'package:expenseful/features/edit_expense/presentation/edit_expense_screen.dart';
 import 'package:expenseful/features/budgets/presentation/budgets_screen.dart';
+import 'package:expenseful/features/categories/presentation/categories_screen.dart';
 import 'package:expenseful/data/database.dart';
 
 final GoRouter router = GoRouter(
@@ -35,6 +36,11 @@ final GoRouter router = GoRouter(
       path: '/budgets',
       name: 'Budgets',
       builder: (context, state) => const BudgetsScreen(),
+    ),
+    GoRoute(
+      path: '/categories',
+      name: 'Categories',
+      builder: (context, state) => const CategoriesScreen(),
     )
   ],
 );

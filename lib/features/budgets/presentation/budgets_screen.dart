@@ -142,6 +142,7 @@ class BudgetsScreen extends ConsumerWidget {
         title: Text(title, style: AppTypography.displayMedium.copyWith(fontSize: 18)),
         content: TextField(
           controller: controller,
+          stylusHandwritingEnabled: false,
           autofocus: true,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           inputFormatters: [

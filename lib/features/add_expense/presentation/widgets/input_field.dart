@@ -21,6 +21,7 @@ class InputField extends StatelessWidget {
       ),
       child: TextField(
         controller: controller,
+        stylusHandwritingEnabled: false,
         style: AppTypography.bodyRegular.copyWith(fontSize: 14),
         decoration: InputDecoration(
           hintText: hint,

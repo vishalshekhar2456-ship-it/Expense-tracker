@@ -31,7 +31,12 @@ The app is functional end-to-end for local expense tracking:
   real DB data).
 - **History** — full, reverse-chronological list of expenses with category
   icons/colors and per-item currency formatting.
-- **Categories** — expenses are tagged with a category (icon + color).
+- **Categories** — expenses are tagged with a category (icon + color). A
+  dedicated Categories screen lets you add from a preset catalog (one tap, no
+  typos) or create a custom one with an icon/color picker. Custom names are
+  normalized and de-duplicated, with a fuzzy "did you mean?" suggestion to catch
+  typos. Removing a category archives it (reversible) rather than deleting, so
+  past expenses keep their icon/color.
 - **Budgets** — an overall monthly budget cap plus per-category limits, set on a
   dedicated Budgets screen. Spend is measured against the configured budget
   cycle (`budgetResetDay`); the dashboard shows a "Budget Used" summary and each
@@ -114,6 +119,9 @@ Ordered roughly by priority. Checked items are done.
 - [x] **Budgets** — overall monthly cap + per-category limits, with a Budgets
       screen and a real dashboard "Budget Used" card (replaced the old
       hardcoded Monthly Trajectory card).
+- [x] **Category management** — add from a preset catalog or create custom
+      (icon/color picker), with typo protection (normalize + dedupe + fuzzy
+      suggestion); remove archives (reversible).
 
 ### Next up — core tracker features
 - [ ] **Filtering & search** — by date range, category, and merchant text.

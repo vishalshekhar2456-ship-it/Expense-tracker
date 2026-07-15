@@ -39,6 +39,7 @@ class AmountCard extends ConsumerWidget {
               Expanded(
                 child: TextField(
                   controller: controller,
+                  stylusHandwritingEnabled: false,
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   style: AppTypography.numericLarge,
                   decoration: const InputDecoration(

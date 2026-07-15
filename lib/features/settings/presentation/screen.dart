@@ -37,11 +37,15 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ],
           ),
-          const _SettingsSection(
+          _SettingsSection(
             title: 'Categories & Tags',
             items: [
-              _SettingsItem(icon: Icons.category_rounded, label: 'Manage categories'),
-              _SettingsItem(icon: Icons.label_rounded, label: 'Manage tags'),
+              _SettingsItem(
+                icon: Icons.category_rounded,
+                label: 'Manage categories',
+                onTap: () => context.push('/categories'),
+              ),
+              const _SettingsItem(icon: Icons.label_rounded, label: 'Manage tags'),
             ],
           ),
           const _SettingsSection(
