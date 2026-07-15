@@ -2,6 +2,8 @@
 // so both surface identical, friendly error messages instead of silently
 // refusing to save.
 
+import 'package:expenseful/core/amount_formatter.dart';
+
 /// Field-level error messages; a null field means that field is valid.
 typedef ExpenseFormErrors = ({String? amount, String? merchant});
 
@@ -10,7 +12,7 @@ ExpenseFormErrors validateExpenseInput({
   required String merchantText,
 }) {
   final trimmedAmount = amountText.trim();
-  final amount = double.tryParse(trimmedAmount);
+  final amount = parseAmount(trimmedAmount);
 
   String? amountError;
   if (trimmedAmount.isEmpty) {

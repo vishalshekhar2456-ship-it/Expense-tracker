@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:expenseful/app/theme.dart';
+import 'package:expenseful/core/amount_formatter.dart';
 import 'package:expenseful/core/widgets/app_text_field.dart';
 import 'package:expenseful/providers/currency_provider.dart';
+import 'package:expenseful/providers/settings_provider.dart';
 
 class AmountCard extends ConsumerWidget {
   final TextEditingController controller;
@@ -18,6 +20,9 @@ class AmountCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currencySymbol = ref.watch(currencySymbolProvider);
+    final currencyCode = ref.watch(settingsProvider).value?.currencyCode ?? 'INR';
+    // Indian currency groups as lakh/crore; everything else uses Western groups.
+    final groupingLocale = currencyCode == 'INR' ? 'en_IN' : 'en_US';
     final hasError = errorText != null;
 
     return Container(
@@ -51,8 +56,15 @@ class AmountCard extends ConsumerWidget {
                   controller: controller,
                   onChanged: onChanged,
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  inputFormatters: [
+                    ThousandsSeparatorInputFormatter(locale: groupingLocale),
+                  ],
                   style: AppTypography.numericLarge,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
+                    hintText: '0.00',
+                    hintStyle: AppTypography.numericLarge.copyWith(
+                      color: AppColors.plumInk.withValues(alpha: 0.25),
+                    ),
                     border: InputBorder.none,
                     isDense: true,
                     contentPadding: EdgeInsets.zero,

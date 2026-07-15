@@ -15,6 +15,7 @@ import 'package:expenseful/features/add_expense/presentation/widgets/category_se
 import 'package:expenseful/features/add_expense/presentation/widgets/expense_form.dart';
 import 'package:expenseful/features/add_expense/presentation/widgets/amount_card.dart';
 import 'package:expenseful/features/add_expense/presentation/expense_validation.dart';
+import 'package:expenseful/core/amount_formatter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:expenseful/providers/database_provider.dart';
 
@@ -81,7 +82,7 @@ class _EditExpenseScreenState extends ConsumerState<EditExpenseScreen> {
       return;
     }
 
-    final amount = double.parse(_amountController.text.trim());
+    final amount = parseAmount(_amountController.text)!;
     final db = ref.read(appDatabaseProvider);
 
     final notes = _notesController.text.trim();

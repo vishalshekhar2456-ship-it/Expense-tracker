@@ -11,6 +11,7 @@ import 'widgets/category_section.dart';
 import 'widgets/expense_form.dart';
 import 'widgets/amount_card.dart';
 import 'expense_validation.dart';
+import 'package:expenseful/core/amount_formatter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:expenseful/providers/database_provider.dart';
 
@@ -23,8 +24,7 @@ class AddExpenseScreen extends ConsumerStatefulWidget {
 
 class _AddExpenseScreenState
     extends ConsumerState<AddExpenseScreen> {
-  final TextEditingController _amountController =
-      TextEditingController(text: '0.00');
+  final TextEditingController _amountController = TextEditingController();
   final TextEditingController _merchantController = TextEditingController();
   final TextEditingController _notesController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
@@ -66,7 +66,7 @@ class _AddExpenseScreenState
       return;
     }
 
-    final amount = double.parse(_amountController.text.trim());
+    final amount = parseAmount(_amountController.text)!;
     final db = ref.read(appDatabaseProvider);
 
     await db.addExpense(
